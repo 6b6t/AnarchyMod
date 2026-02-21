@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "me.itskronx11"
+group = "net.blockhost"
 version = "1.0.0"
 
 repositories {

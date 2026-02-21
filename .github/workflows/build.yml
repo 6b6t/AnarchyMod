@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - run: ./gradlew build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anarchymod-mc-1.21.8
+          path: mc-1.21.8/build/libs/anarchymod-mc-1.21.8-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anarchymod-mc-1.21.9
+          path: mc-1.21.9/build/libs/anarchymod-mc-1.21.9-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anarchymod-mc-1.21.10
+          path: mc-1.21.10/build/libs/anarchymod-mc-1.21.10-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anarchymod-mc-1.21.11
+          path: mc-1.21.11/build/libs/anarchymod-mc-1.21.11-*.jar
+          if-no-files-found: error

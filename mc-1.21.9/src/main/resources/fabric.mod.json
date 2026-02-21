@@ -3,14 +3,19 @@
   "id": "anarchymod",
   "version": "${version}",
   "name": "AnarchyMod",
-  "description": "",
-  "authors": [],
-  "contact": {},
-  "license": "All-Rights-Reserved",
+  "description": "Client-side mod for anarchy Minecraft servers",
+  "authors": ["6b6t"],
+  "contact": {
+    "homepage": "https://6b6t.org",
+    "issues": "https://github.com/6b6t/AnarchyMod/issues",
+    "sources": "https://github.com/6b6t/AnarchyMod"
+  },
+  "license": "MIT",
+  "icon": "assets/anarchymod/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "me.itskronx11.anarchymod.AnarchyMod"
+      "net.blockhost.anarchymod.AnarchyMod"
     ]
   },
   "mixins": [
@@ -19,6 +24,7 @@
   "depends": {
     "fabric": "*",
     "fabricloader": ">=${loader_version}",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "java": ">=21"
   }
 }
