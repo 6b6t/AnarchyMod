@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "anarchymod",
+  "version": "${version}",
+  "name": "AnarchyMod",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.itskronx11.anarchymod.AnarchyMod"
+    ]
+  },
+  "mixins": [
+    "anarchymod.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}"
+  }
+}
