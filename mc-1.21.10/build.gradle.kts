@@ -17,6 +17,12 @@ base {
 repositories {
 }
 
+sourceSets {
+    main {
+        resources.srcDir(project(":common").sourceSets["main"].resources.srcDirs)
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
