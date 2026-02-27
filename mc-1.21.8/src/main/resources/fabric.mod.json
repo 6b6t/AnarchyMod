@@ -21,6 +21,13 @@
   "mixins": [
     "anarchymod.mixins.json"
   ],
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://6b6t.org/discord"
+      }
+    }
+  },
   "depends": {
     "fabric": "*",
     "fabricloader": ">=${loader_version}",
