@@ -31,11 +31,6 @@ dependencies {
     implementation(project(":common"))
 }
 
-tasks.named<Jar>("jar") {
-    dependsOn(project(":common").tasks.named("classes"))
-    from(project(":common").sourceSets["main"].output)
-}
-
 tasks.processResources {
     inputs.property("version", project.version)
     inputs.property("minecraft_version", minecraftVersion)
@@ -63,6 +58,8 @@ java {
 }
 
 tasks.jar {
+    dependsOn(project(":common").tasks.named("classes"))
+    from(project(":common").sourceSets["main"].output.classesDirs)
     from("LICENSE") {
         rename { "${it}_${base.archivesName.get()}" }
     }
