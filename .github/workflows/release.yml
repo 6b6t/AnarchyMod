@@ -82,7 +82,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ inputs.version }}" \
-            --title "${{ inputs.version }}" \
+            --title "AnarchyMod ${{ inputs.version }}" \
             --notes "${{ steps.changelog.outputs.changelog }}" \
             mc-1.21.8/build/libs/anarchymod-mc-1.21.8-${{ inputs.version }}.jar \
             mc-1.21.9/build/libs/anarchymod-mc-1.21.9-${{ inputs.version }}.jar \
