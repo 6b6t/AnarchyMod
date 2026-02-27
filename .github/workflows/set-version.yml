@@ -1,32 +1,35 @@
-name: Set Version
+name: set-version
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to set (e.g. 1.1.0 or 1.2.0-SNAPSHOT)"
+        description: 'Version to set'
         required: true
   workflow_call:
     inputs:
       version:
-        description: "Version to set"
         required: true
         type: string
 
-permissions:
-  contents: write
-
 jobs:
   set-version:
+    name: Set Version
+
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
 
-      - name: Set version
+      - name: Set Version
         run: sed -i "s/version = \".*\"/version = \"${{ inputs.version }}\"/" build.gradle.kts
 
-      - uses: stefanzweifel/git-auto-commit-action@v7
+      - name: Commit Version
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "chore(release): bump version to ${{ inputs.version }}"
+          commit_message: 'chore(release): bump version to ${{ inputs.version }}'
