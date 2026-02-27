@@ -50,8 +50,8 @@ public class Domains {
             array.forEach(element ->
                 domains.add(element.getAsString().toLowerCase(Locale.ROOT))
             );
-        } catch (Exception e) {
-            LOGGER.warning("Failed to load domains from remote, using defaults: " + e.getMessage());
+        } catch (Throwable t) {
+            LOGGER.warning("Failed to load domains from remote, using defaults: " + t.getMessage());
         }
     }
 
