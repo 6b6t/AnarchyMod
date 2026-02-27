@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockedServers.class)
 public class BlockedServersMixin {
 
-    @Inject(method = "isBlockedServerHostName", at = @At("TAIL"), cancellable = true, remap = false)
+    @Inject(method = "isBlockedServerHostName", at = @At("RETURN"), cancellable = true, remap = false)
     public void isBlockedServerHostName(String server, CallbackInfoReturnable<Boolean> cir) {
         boolean contains = Domains.contains(server);
         if (contains) {

@@ -19,7 +19,7 @@ public class ServerListMixin {
     @Final
     private List<ServerData> serverList;
 
-    @Inject(method = "load", at = @At("TAIL"))
+    @Inject(method = "load", at = @At("RETURN"))
     public void afterLoad(CallbackInfo ci) {
         if (serverList.stream().noneMatch(data -> Domains.contains(data.ip))) {
             serverList.addFirst(new ServerData("6b6t", "6b6t.org", ServerData.Type.OTHER));
