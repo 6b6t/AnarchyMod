@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "net.blockhost"
-version = "1.0.3"
+version = "1.0.4-SNAPSHOT"
 
 repositories {
     mavenCentral()
