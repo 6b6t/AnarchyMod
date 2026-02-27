@@ -80,14 +80,33 @@ jobs:
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
         run: |
-          gh release create "${{ inputs.version }}" \
-            --title "AnarchyMod ${{ inputs.version }}" \
-            --notes "${{ steps.changelog.outputs.changelog }}" \
-            mc-1.21.8/build/libs/anarchymod-mc-1.21.8-${{ inputs.version }}.jar \
-            mc-1.21.9/build/libs/anarchymod-mc-1.21.9-${{ inputs.version }}.jar \
-            mc-1.21.10/build/libs/anarchymod-mc-1.21.10-${{ inputs.version }}.jar \
-            mc-1.21.11/build/libs/anarchymod-mc-1.21.11-${{ inputs.version }}.jar
+          VERSION="${{ inputs.version }}"
+          REPO="${{ github.repository }}"
+          DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
+
+          NOTES=$(cat <<EOF
+          ## Downloads
+
+          | Minecraft Version | Download |
+          |---|---|
+          | 1.21.8 | [\`anarchymod-mc-1.21.8-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.8-${VERSION}.jar) |
+          | 1.21.9 | [\`anarchymod-mc-1.21.9-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.9-${VERSION}.jar) |
+          | 1.21.10 | [\`anarchymod-mc-1.21.10-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.10-${VERSION}.jar) |
+          | 1.21.11 | [\`anarchymod-mc-1.21.11-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.11-${VERSION}.jar) |
+
+          ${CHANGELOG}
+          EOF
+          )
+
+          gh release create "${VERSION}" \
+            --title "AnarchyMod ${VERSION}" \
+            --notes "${NOTES}" \
+            mc-1.21.8/build/libs/anarchymod-mc-1.21.8-${VERSION}.jar \
+            mc-1.21.9/build/libs/anarchymod-mc-1.21.9-${VERSION}.jar \
+            mc-1.21.10/build/libs/anarchymod-mc-1.21.10-${VERSION}.jar \
+            mc-1.21.11/build/libs/anarchymod-mc-1.21.11-${VERSION}.jar
 
   set-after-version:
     needs: build
