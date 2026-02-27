@@ -3,7 +3,7 @@
 [![Build](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml/badge.svg)](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔓 Client-side Fabric mod for anarchy Minecraft servers — unblocks servers and auto-adds 6b6t to the server list.
+🔓 Bypass a potential Mojang blacklist of 6b6t - the biggest anarchy server in the world.
 
 ## Features
 
