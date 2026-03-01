@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "anarchymod",
+  "version": "${version}",
+  "name": "AnarchyMod",
+  "description": "Bypass a potential Mojang blacklist of 6b6t - the biggest anarchy server in the world.",
+  "authors": [
+    "6b6t"
+  ],
+  "contact": {
+    "homepage": "https://www.6b6t.org/?utm_source=anarchymod&utm_medium=mod_menu&utm_campaign=evergreen_website&utm_content=description_link",
+    "issues": "https://github.com/6b6t/AnarchyMod/issues",
+    "sources": "https://github.com/6b6t/AnarchyMod"
+  },
+  "license": "MIT",
+  "icon": "assets/anarchymod/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.blockhost.anarchymod.AnarchyMod"
+    ]
+  },
+  "mixins": [
+    "anarchymod.mixins.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://6b6t.org/discord"
+      }
+    }
+  },
+  "depends": {
+    "fabric": "*",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}"
+  }
+}

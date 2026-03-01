@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Set Version
-        run: sed -i "s/version = \".*\"/version = \"${{ inputs.version }}\"/" build.gradle.kts
+        run: sed -i "s/mod_version=.*/mod_version=${{ inputs.version }}/" gradle.properties
 
       - name: Commit Version
         uses: stefanzweifel/git-auto-commit-action@v7

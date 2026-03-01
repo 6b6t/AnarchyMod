@@ -18,124 +18,124 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v5
 
-      - run: ./gradlew build
+      - run: ./gradlew chiseledBuild
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.19.4
-          path: mc-1.19.4/build/libs/anarchymod-mc-1.19.4-*.jar
+          path: versions/1.19.4/build/libs/anarchymod-mc-1.19.4-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20
-          path: mc-1.20/build/libs/anarchymod-mc-1.20-*.jar
+          path: versions/1.20/build/libs/anarchymod-mc-1.20-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.1
-          path: mc-1.20.1/build/libs/anarchymod-mc-1.20.1-*.jar
+          path: versions/1.20.1/build/libs/anarchymod-mc-1.20.1-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.2
-          path: mc-1.20.2/build/libs/anarchymod-mc-1.20.2-*.jar
+          path: versions/1.20.2/build/libs/anarchymod-mc-1.20.2-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.3
-          path: mc-1.20.3/build/libs/anarchymod-mc-1.20.3-*.jar
+          path: versions/1.20.3/build/libs/anarchymod-mc-1.20.3-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.4
-          path: mc-1.20.4/build/libs/anarchymod-mc-1.20.4-*.jar
+          path: versions/1.20.4/build/libs/anarchymod-mc-1.20.4-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.5
-          path: mc-1.20.5/build/libs/anarchymod-mc-1.20.5-*.jar
+          path: versions/1.20.5/build/libs/anarchymod-mc-1.20.5-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.20.6
-          path: mc-1.20.6/build/libs/anarchymod-mc-1.20.6-*.jar
+          path: versions/1.20.6/build/libs/anarchymod-mc-1.20.6-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21
-          path: mc-1.21/build/libs/anarchymod-mc-1.21-*.jar
+          path: versions/1.21/build/libs/anarchymod-mc-1.21-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.1
-          path: mc-1.21.1/build/libs/anarchymod-mc-1.21.1-*.jar
+          path: versions/1.21.1/build/libs/anarchymod-mc-1.21.1-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.2
-          path: mc-1.21.2/build/libs/anarchymod-mc-1.21.2-*.jar
+          path: versions/1.21.2/build/libs/anarchymod-mc-1.21.2-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.3
-          path: mc-1.21.3/build/libs/anarchymod-mc-1.21.3-*.jar
+          path: versions/1.21.3/build/libs/anarchymod-mc-1.21.3-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.4
-          path: mc-1.21.4/build/libs/anarchymod-mc-1.21.4-*.jar
+          path: versions/1.21.4/build/libs/anarchymod-mc-1.21.4-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.5
-          path: mc-1.21.5/build/libs/anarchymod-mc-1.21.5-*.jar
+          path: versions/1.21.5/build/libs/anarchymod-mc-1.21.5-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.6
-          path: mc-1.21.6/build/libs/anarchymod-mc-1.21.6-*.jar
+          path: versions/1.21.6/build/libs/anarchymod-mc-1.21.6-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.7
-          path: mc-1.21.7/build/libs/anarchymod-mc-1.21.7-*.jar
+          path: versions/1.21.7/build/libs/anarchymod-mc-1.21.7-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.8
-          path: mc-1.21.8/build/libs/anarchymod-mc-1.21.8-*.jar
+          path: versions/1.21.8/build/libs/anarchymod-mc-1.21.8-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.9
-          path: mc-1.21.9/build/libs/anarchymod-mc-1.21.9-*.jar
+          path: versions/1.21.9/build/libs/anarchymod-mc-1.21.9-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.10
-          path: mc-1.21.10/build/libs/anarchymod-mc-1.21.10-*.jar
+          path: versions/1.21.10/build/libs/anarchymod-mc-1.21.10-*.jar
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v7
         with:
           name: anarchymod-mc-1.21.11
-          path: mc-1.21.11/build/libs/anarchymod-mc-1.21.11-*.jar
+          path: versions/1.21.11/build/libs/anarchymod-mc-1.21.11-*.jar
           if-no-files-found: error
