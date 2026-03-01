@@ -10,13 +10,14 @@ public class JoinPayload implements CustomPacketPayload {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("anarchymod", "join");
 
     public static final StreamCodec<FriendlyByteBuf, JoinPayload> CODEC =
-            StreamCodec.of(
-                    (payload, buf) -> {},
-                    buf -> new JoinPayload()
-            );
+        StreamCodec.of(
+            (payload, buf) -> {
+            },
+            buf -> new JoinPayload()
+        );
 
     public static final Type<JoinPayload> TYPE =
-            new Type<>(ID);
+        new Type<>(ID);
 
     @Override
     public Type<? extends CustomPacketPayload> type() {
