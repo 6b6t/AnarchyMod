@@ -34,7 +34,8 @@ public class Domains {
     }
 
     private static void loadRemote() {
-        try (HttpClient client = HttpClient.newHttpClient()) {
+        try {
+            HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DOMAINS_URL))
                 .timeout(Duration.ofSeconds(15))

@@ -15,6 +15,22 @@
 
 | Minecraft | Module       |
 |-----------|--------------|
+| 1.19.4    | `mc-1.19.4`  |
+| 1.20      | `mc-1.20`    |
+| 1.20.1    | `mc-1.20.1`  |
+| 1.20.2    | `mc-1.20.2`  |
+| 1.20.3    | `mc-1.20.3`  |
+| 1.20.4    | `mc-1.20.4`  |
+| 1.20.5    | `mc-1.20.5`  |
+| 1.20.6    | `mc-1.20.6`  |
+| 1.21      | `mc-1.21`    |
+| 1.21.1    | `mc-1.21.1`  |
+| 1.21.2    | `mc-1.21.2`  |
+| 1.21.3    | `mc-1.21.3`  |
+| 1.21.4    | `mc-1.21.4`  |
+| 1.21.5    | `mc-1.21.5`  |
+| 1.21.6    | `mc-1.21.6`  |
+| 1.21.7    | `mc-1.21.7`  |
 | 1.21.8    | `mc-1.21.8`  |
 | 1.21.9    | `mc-1.21.9`  |
 | 1.21.10   | `mc-1.21.10` |
@@ -22,7 +38,8 @@
 
 ## Installation
 
-1. Install [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api) for your Minecraft version
+1. Install [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api) for your
+   Minecraft version
 2. Download the matching JAR from [Releases](https://github.com/6b6t/AnarchyMod/releases)
 3. Place the JAR in your `.minecraft/mods` folder
 

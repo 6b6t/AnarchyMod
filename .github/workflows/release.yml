@@ -94,6 +94,22 @@ jobs:
 
           | Minecraft Version | Download |
           |---|---|
+          | 1.19.4 | [\`anarchymod-mc-1.19.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.19.4-${VERSION}.jar) |
+          | 1.20 | [\`anarchymod-mc-1.20-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20-${VERSION}.jar) |
+          | 1.20.1 | [\`anarchymod-mc-1.20.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.1-${VERSION}.jar) |
+          | 1.20.2 | [\`anarchymod-mc-1.20.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.2-${VERSION}.jar) |
+          | 1.20.3 | [\`anarchymod-mc-1.20.3-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.3-${VERSION}.jar) |
+          | 1.20.4 | [\`anarchymod-mc-1.20.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.4-${VERSION}.jar) |
+          | 1.20.5 | [\`anarchymod-mc-1.20.5-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.5-${VERSION}.jar) |
+          | 1.20.6 | [\`anarchymod-mc-1.20.6-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.6-${VERSION}.jar) |
+          | 1.21 | [\`anarchymod-mc-1.21-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21-${VERSION}.jar) |
+          | 1.21.1 | [\`anarchymod-mc-1.21.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.1-${VERSION}.jar) |
+          | 1.21.2 | [\`anarchymod-mc-1.21.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.2-${VERSION}.jar) |
+          | 1.21.3 | [\`anarchymod-mc-1.21.3-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.3-${VERSION}.jar) |
+          | 1.21.4 | [\`anarchymod-mc-1.21.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.4-${VERSION}.jar) |
+          | 1.21.5 | [\`anarchymod-mc-1.21.5-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.5-${VERSION}.jar) |
+          | 1.21.6 | [\`anarchymod-mc-1.21.6-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.6-${VERSION}.jar) |
+          | 1.21.7 | [\`anarchymod-mc-1.21.7-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.7-${VERSION}.jar) |
           | 1.21.8 | [\`anarchymod-mc-1.21.8-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.8-${VERSION}.jar) |
           | 1.21.9 | [\`anarchymod-mc-1.21.9-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.9-${VERSION}.jar) |
           | 1.21.10 | [\`anarchymod-mc-1.21.10-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.10-${VERSION}.jar) |
@@ -106,6 +122,22 @@ jobs:
           gh release create "${VERSION}" \
             --title "AnarchyMod ${VERSION}" \
             --notes "${NOTES}" \
+            mc-1.19.4/build/libs/anarchymod-mc-1.19.4-${VERSION}.jar \
+            mc-1.20/build/libs/anarchymod-mc-1.20-${VERSION}.jar \
+            mc-1.20.1/build/libs/anarchymod-mc-1.20.1-${VERSION}.jar \
+            mc-1.20.2/build/libs/anarchymod-mc-1.20.2-${VERSION}.jar \
+            mc-1.20.3/build/libs/anarchymod-mc-1.20.3-${VERSION}.jar \
+            mc-1.20.4/build/libs/anarchymod-mc-1.20.4-${VERSION}.jar \
+            mc-1.20.5/build/libs/anarchymod-mc-1.20.5-${VERSION}.jar \
+            mc-1.20.6/build/libs/anarchymod-mc-1.20.6-${VERSION}.jar \
+            mc-1.21/build/libs/anarchymod-mc-1.21-${VERSION}.jar \
+            mc-1.21.1/build/libs/anarchymod-mc-1.21.1-${VERSION}.jar \
+            mc-1.21.2/build/libs/anarchymod-mc-1.21.2-${VERSION}.jar \
+            mc-1.21.3/build/libs/anarchymod-mc-1.21.3-${VERSION}.jar \
+            mc-1.21.4/build/libs/anarchymod-mc-1.21.4-${VERSION}.jar \
+            mc-1.21.5/build/libs/anarchymod-mc-1.21.5-${VERSION}.jar \
+            mc-1.21.6/build/libs/anarchymod-mc-1.21.6-${VERSION}.jar \
+            mc-1.21.7/build/libs/anarchymod-mc-1.21.7-${VERSION}.jar \
             mc-1.21.8/build/libs/anarchymod-mc-1.21.8-${VERSION}.jar \
             mc-1.21.9/build/libs/anarchymod-mc-1.21.9-${VERSION}.jar \
             mc-1.21.10/build/libs/anarchymod-mc-1.21.10-${VERSION}.jar \

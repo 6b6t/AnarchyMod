@@ -2,9 +2,7 @@ package net.blockhost.anarchymod;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 
 public class AnarchyMod implements ClientModInitializer {
 

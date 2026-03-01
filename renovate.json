@@ -1,12 +1,18 @@
 {
-  "extends": ["config:base", "group:allNonMajor", ":semanticCommits"],
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    ":semanticCommits"
+  ],
   "baseBranches": [
     "main"
   ],
   "labels": [
     "enhancement"
   ],
-  "reviewers": ["xymb-endcrystalme"],
+  "reviewers": [
+    "xymb-endcrystalme"
+  ],
   "packageRules": [
     {
       "matchUpdateTypes": [
