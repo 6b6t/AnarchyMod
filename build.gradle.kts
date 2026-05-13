@@ -6,9 +6,7 @@ plugins {
 val minecraftVersion = stonecutter.current.project
 val loaderVersion = property("loader_version") as String
 val fabricApiVersion = property("fabric_api_version") as String
-val javaVersion = if (stonecutter.eval(minecraftVersion, ">=26.1")) 25
-else (property("java_version") as String).toInt()
-val isUnobfuscated = stonecutter.eval(minecraftVersion, ">=26.1")
+val javaVersion = (property("java_version") as String).toInt()
 
 version = property("mod_version")!!
 group = property("maven_group")!!
