@@ -1,14 +1,12 @@
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.16.+"
+    id("fabric-loom") version "1.16.1"
     id("maven-publish")
 }
 
 val minecraftVersion = stonecutter.current.project
 val loaderVersion = property("loader_version") as String
 val fabricApiVersion = property("fabric_api_version") as String
-val javaVersion = if (stonecutter.eval(minecraftVersion, ">=26.1")) 25
-else (property("java_version") as String).toInt()
-val isUnobfuscated = stonecutter.eval(minecraftVersion, ">=26.1")
+val javaVersion = (property("java_version") as String).toInt()
 
 version = property("mod_version")!!
 group = property("maven_group")!!
@@ -19,8 +17,9 @@ base {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
-    implementation("net.fabricmc:fabric-loader:$loaderVersion")
-    implementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     implementation("com.google.code.gson:gson:2.14.0")
 }
 

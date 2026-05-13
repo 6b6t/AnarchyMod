@@ -14,9 +14,11 @@ public class AnarchyMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        //? if >=1.20.5 {
-        PayloadTypeRegistry.playC2S().register(JoinPayload.TYPE, JoinPayload.CODEC);
-        //?}
+//? if >=26.1 {
+        PayloadTypeRegistry.serverboundPlay().register(JoinPayload.TYPE, JoinPayload.CODEC);
+//?} else if >=1.20.5 {
+        /*PayloadTypeRegistry.playC2S().register(JoinPayload.TYPE, JoinPayload.CODEC);
+         *///?}
         ClientPlayConnectionEvents.JOIN.register((listener, sender, client) -> {
             if (client.getCurrentServer() != null && Domains.contains(client.getCurrentServer().ip))
                 //? if <1.20.5 {

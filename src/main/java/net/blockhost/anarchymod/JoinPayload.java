@@ -29,7 +29,7 @@ public class JoinPayload implements CustomPacketPayload {
 
     public static final StreamCodec<FriendlyByteBuf, JoinPayload> CODEC =
         StreamCodec.of(
-            (payload, buf) -> {
+            (buf, payload) -> {
             },
             buf -> new JoinPayload()
         );
