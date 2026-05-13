@@ -1,5 +1,5 @@
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.16.+"
+    id("net.fabricmc.fabric-loom-remap") version "1.16.+"
     id("maven-publish")
 }
 
@@ -17,8 +17,9 @@ base {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
-    implementation("net.fabricmc:fabric-loader:$loaderVersion")
-    implementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     implementation("com.google.code.gson:gson:2.14.0")
 }
 
