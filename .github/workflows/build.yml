@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
 
       - uses: gradle/actions/setup-gradle@v6
 
@@ -138,4 +138,22 @@ jobs:
         with:
           name: anarchymod-mc-1.21.11
           path: versions/1.21.11/build/libs/anarchymod-mc-1.21.11-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: anarchymod-mc-26.1
+          path: versions/26.1/build/libs/anarchymod-mc-26.1-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: anarchymod-mc-26.1.1
+          path: versions/26.1.1/build/libs/anarchymod-mc-26.1.1-*.jar
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: anarchymod-mc-26.1.2
+          path: versions/26.1.2/build/libs/anarchymod-mc-26.1.2-*.jar
           if-no-files-found: error

@@ -48,7 +48,7 @@
 
 ## Building from Source
 
-Requires Java 21+.
+Requires Java 25+ for the full multi-version build.
 
 ```sh
 git clone https://github.com/6b6t/AnarchyMod.git
