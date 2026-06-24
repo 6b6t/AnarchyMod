@@ -1,0 +1,22 @@
+title: AnarchyClient
+description: Fabric 26.2 utility mod for 6b6t.
+theme: jekyll-theme-hacker
+
+# The release jar lives on the Releases page, so hide the source zip/tar buttons.
+show_downloads: false
+
+# This repo is a Gradle project, so keep everything that is not the site out of
+# the generated pages. Dotfiles and dotfolders (.github, .gradle, ...) are
+# already ignored by Jekyll.
+exclude:
+  - src/
+  - build/
+  - gradle/
+  - run/
+  - gradlew
+  - gradlew.bat
+  - build.gradle.kts
+  - settings.gradle.kts
+  - jitpack.yml
+  - AGENTS.md
+  - CLAUDE.md
