@@ -1,5 +1,5 @@
 plugins {
-    id("net.fabricmc.fabric-loom-remap") version "1.17.12"
+    id("net.fabricmc.fabric-loom-remap") version "1.17.13"
     id("maven-publish")
 }
 
