@@ -3,7 +3,7 @@
 [![Build](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml/badge.svg)](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔓 Bypass Mojang's ban of 6b6t — the biggest anarchy server in the world.
+🔓 The Minecraft mod required to play on 6b6t — bypass Mojang's ban of the world's biggest anarchy server.
 
 ## Features
 
@@ -41,6 +41,8 @@
 | 26.2      | `mc-26.2`    |
 
 ## Installation
+
+AnarchyMod is required to connect to and play on 6b6t.
 
 1. Install [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api) for your
    Minecraft version
