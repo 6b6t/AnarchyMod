@@ -117,6 +117,7 @@ jobs:
           | 26.1 | [\`anarchymod-mc-26.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1-${VERSION}.jar) |
           | 26.1.1 | [\`anarchymod-mc-26.1.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1.1-${VERSION}.jar) |
           | 26.1.2 | [\`anarchymod-mc-26.1.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1.2-${VERSION}.jar) |
+          | 26.2 | [\`anarchymod-mc-26.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.2-${VERSION}.jar) |
 
           ${CHANGELOG}
           EOF
@@ -147,7 +148,8 @@ jobs:
             versions/1.21.11/build/libs/anarchymod-mc-1.21.11-${VERSION}.jar \
             versions/26.1/build/libs/anarchymod-mc-26.1-${VERSION}.jar \
             versions/26.1.1/build/libs/anarchymod-mc-26.1.1-${VERSION}.jar \
-            versions/26.1.2/build/libs/anarchymod-mc-26.1.2-${VERSION}.jar
+            versions/26.1.2/build/libs/anarchymod-mc-26.1.2-${VERSION}.jar \
+            versions/26.2/build/libs/anarchymod-mc-26.2-${VERSION}.jar
 
   set-after-version:
     needs: build
