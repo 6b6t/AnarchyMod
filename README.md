@@ -3,7 +3,7 @@
 [![Build](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml/badge.svg)](https://github.com/6b6t/AnarchyMod/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-🔓 Bypass a potential Mojang blacklist of 6b6t - the biggest anarchy server in the world.
+🔓 Bypass Mojang's ban of 6b6t — the biggest anarchy server in the world.
 
 ## Features
 
