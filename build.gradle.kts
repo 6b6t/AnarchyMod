@@ -21,6 +21,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     implementation("com.google.code.gson:gson:2.14.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 loom {
@@ -56,6 +58,10 @@ tasks.processResources {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(javaVersion)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 java {
