@@ -44,8 +44,7 @@
 
 AnarchyMod is required to connect to and play on 6b6t.
 
-1. Install [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api) for your
-   Minecraft version
+1. Install [Fabric Loader](https://fabricmc.net/) for your Minecraft version
 2. Download the matching JAR from [Releases](https://github.com/6b6t/AnarchyMod/releases)
 3. Place the JAR in your `.minecraft/mods` folder
 

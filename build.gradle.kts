@@ -5,7 +5,6 @@ plugins {
 
 val minecraftVersion = stonecutter.current.project
 val loaderVersion = property("loader_version") as String
-val fabricApiVersion = property("fabric_api_version") as String
 val javaVersion = (property("java_version") as String).toInt()
 
 version = property("mod_version")!!
@@ -19,7 +18,6 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
     implementation("com.google.code.gson:gson:2.14.0")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
