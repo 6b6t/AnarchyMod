@@ -1,165 +1,213 @@
-name: Build
+name: Publish Release
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release"
+        required: true
+      after-version:
+        description: "Snapshot version after release"
+        required: true
 
 jobs:
+  set-release-version:
+    uses: ./.github/workflows/set-version.yml
+    with:
+      version: ${{ inputs.version }}
+
   build:
+    needs: set-release-version
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-java@v5
+      - name: Checkout repository
+        uses: actions/checkout@v7
         with:
-          distribution: temurin
-          java-version: 25
+          ref: ${{ github.ref }}
 
-      - uses: gradle/actions/setup-gradle@v6
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
 
-      - run: ./gradlew chiseledBuild
-
-      - uses: actions/upload-artifact@v7
+      - name: Set up JDK 25
+        uses: actions/setup-java@v5
         with:
-          name: anarchymod-mc-1.19.4
-          path: versions/1.19.4/build/libs/anarchymod-mc-1.19.4-*.jar
-          if-no-files-found: error
+          java-version: "25"
+          distribution: "temurin"
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20
-          path: versions/1.20/build/libs/anarchymod-mc-1.20-*.jar
-          if-no-files-found: error
+      - name: Build with Gradle
+        run: ./gradlew chiseledBuild
 
-      - uses: actions/upload-artifact@v7
+      - name: Build Changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v6
         with:
-          name: anarchymod-mc-1.20.1
-          path: versions/1.20.1/build/libs/anarchymod-mc-1.20.1-*.jar
-          if-no-files-found: error
+          mode: COMMIT
+          toTag: ${{ github.ref }}
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}",
+              "commit_template": "- [`#{{SHORT_MERGE_SHA}}`](https://github.com/#{{OWNER}}/#{{REPO}}/commit/#{{MERGE_SHA}}) #{{TITLE}}",
+              "categories": [
+                { "title": "## Features", "labels": ["feat", "feature"] },
+                { "title": "## Fixes", "labels": ["fix", "bug"] },
+                { "title": "## Performance", "labels": ["perf"] },
+                { "title": "## Refactor", "labels": ["refactor"] },
+                { "title": "## Documentation", "labels": ["docs"] },
+                { "title": "## Build", "labels": ["build", "chore", "ci"] },
+                { "title": "## Other", "labels": [] }
+              ],
+              "empty_template": "no changes",
+              "label_extractor": [
+                {
+                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+                  "on_property": "title",
+                  "target": "$1"
+                }
+              ],
+              "custom_placeholders": [
+                {
+                  "name": "SHORT_MERGE_SHA",
+                  "source": "MERGE_SHA",
+                  "transformer": {
+                    "pattern": "^([0-9a-f]{7})[0-9a-f]*$",
+                    "target": "$1"
+                  }
+                }
+              ]
+            }
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20.2
-          path: versions/1.20.2/build/libs/anarchymod-mc-1.20.2-*.jar
-          if-no-files-found: error
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+        run: |
+          VERSION="${{ inputs.version }}"
+          REPO="${{ github.repository }}"
+          DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20.3
-          path: versions/1.20.3/build/libs/anarchymod-mc-1.20.3-*.jar
-          if-no-files-found: error
+          link() { echo "[${1}](${DOWNLOAD_URL}/anarchymod-mc-${1}-${VERSION}.jar)"; }
+          join() { local IFS=","; local out="$*"; echo "${out//,/, }"; }
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20.4
-          path: versions/1.20.4/build/libs/anarchymod-mc-1.20.4-*.jar
-          if-no-files-found: error
+          mapfile -t MC_VERSIONS < <(for f in versions/*/gradle.properties; do
+            grep "^minecraft_version=" "$f" | cut -d= -f2
+          done | sort -V)
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20.5
-          path: versions/1.20.5/build/libs/anarchymod-mc-1.20.5-*.jar
-          if-no-files-found: error
+          rows=()
+          group_key=""
+          group_links=()
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.20.6
-          path: versions/1.20.6/build/libs/anarchymod-mc-1.20.6-*.jar
-          if-no-files-found: error
+          flush_group() {
+            [ ${#group_links[@]} -eq 0 ] && return
+            rows+=("| ${group_key} | $(join "${group_links[@]}") |")
+          }
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21
-          path: versions/1.21/build/libs/anarchymod-mc-1.21-*.jar
-          if-no-files-found: error
+          for v in "${MC_VERSIONS[@]}"; do
+            key=$(echo "$v" | cut -d. -f1,2)
+            if [ "$key" != "$group_key" ]; then
+              flush_group
+              group_key="$key"
+              group_links=()
+            fi
+            group_links+=("$(link "$v")")
+          done
+          flush_group
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.1
-          path: versions/1.21.1/build/libs/anarchymod-mc-1.21.1-*.jar
-          if-no-files-found: error
+          TABLE_ROWS=$(printf "%s\n" "${rows[@]}")
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.2
-          path: versions/1.21.2/build/libs/anarchymod-mc-1.21.2-*.jar
-          if-no-files-found: error
+          NOTES=$(cat <<EOF
+          ## Downloads
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.3
-          path: versions/1.21.3/build/libs/anarchymod-mc-1.21.3-*.jar
-          if-no-files-found: error
+          Grab the jar matching your Minecraft version. All builds are also attached below under Assets.
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.4
-          path: versions/1.21.4/build/libs/anarchymod-mc-1.21.4-*.jar
-          if-no-files-found: error
+          | Minecraft versions | Downloads |
+          |---|---|
+          ${TABLE_ROWS}
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.5
-          path: versions/1.21.5/build/libs/anarchymod-mc-1.21.5-*.jar
-          if-no-files-found: error
+          ${CHANGELOG}
+          EOF
+          )
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.6
-          path: versions/1.21.6/build/libs/anarchymod-mc-1.21.6-*.jar
-          if-no-files-found: error
+          shopt -s nullglob
+          ASSETS=(versions/*/build/libs/anarchymod-mc-*-"${VERSION}".jar)
+          shopt -u nullglob
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.7
-          path: versions/1.21.7/build/libs/anarchymod-mc-1.21.7-*.jar
-          if-no-files-found: error
+          if [ ${#ASSETS[@]} -eq 0 ]; then
+            echo "::error::No built jars matched versions/*/build/libs/anarchymod-mc-*-${VERSION}.jar - refusing to create an empty release." >&2
+            exit 1
+          fi
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.8
-          path: versions/1.21.8/build/libs/anarchymod-mc-1.21.8-*.jar
-          if-no-files-found: error
+          gh release create "${VERSION}" \
+            --title "AnarchyMod ${VERSION}" \
+            --notes "${NOTES}" \
+            "${ASSETS[@]}"
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.9
-          path: versions/1.21.9/build/libs/anarchymod-mc-1.21.9-*.jar
-          if-no-files-found: error
+      - name: Update README download links
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          : "${VERSION:?version input is required}"
+          REPO="${{ github.repository }}"
+          DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.10
-          path: versions/1.21.10/build/libs/anarchymod-mc-1.21.10-*.jar
-          if-no-files-found: error
+          link() { echo "[${1}](${DOWNLOAD_URL}/anarchymod-mc-${1}-${VERSION}.jar)"; }
+          join() { local IFS=","; local out="$*"; echo "${out//,/, }"; }
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-1.21.11
-          path: versions/1.21.11/build/libs/anarchymod-mc-1.21.11-*.jar
-          if-no-files-found: error
+          mapfile -t MC_VERSIONS < <(for f in versions/*/gradle.properties; do
+            grep "^minecraft_version=" "$f" | cut -d= -f2
+          done | sort -V)
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-26.1
-          path: versions/26.1/build/libs/anarchymod-mc-26.1-*.jar
-          if-no-files-found: error
+          rows=()
+          group_key=""
+          group_links=()
+          group_javas=()
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-26.1.1
-          path: versions/26.1.1/build/libs/anarchymod-mc-26.1.1-*.jar
-          if-no-files-found: error
+          flush_group() {
+            [ ${#group_links[@]} -eq 0 ] && return
+            mapfile -t uniq_java < <(printf "%s\n" "${group_javas[@]}" | sort -un)
+            java_label=$(IFS="/"; echo "${uniq_java[*]}")
+            rows+=("| $(join "${group_links[@]}") | ${java_label} |")
+          }
 
-      - uses: actions/upload-artifact@v7
-        with:
-          name: anarchymod-mc-26.1.2
-          path: versions/26.1.2/build/libs/anarchymod-mc-26.1.2-*.jar
-          if-no-files-found: error
+          for v in "${MC_VERSIONS[@]}"; do
+            key=$(echo "$v" | cut -d. -f1,2)
+            jv=$(grep "^java_version=" "versions/$v/gradle.properties" | cut -d= -f2)
+            if [ "$key" != "$group_key" ]; then
+              flush_group
+              group_key="$key"
+              group_links=()
+              group_javas=()
+            fi
+            group_links+=("$(link "$v")")
+            group_javas+=("$jv")
+          done
+          flush_group
 
-      - uses: actions/upload-artifact@v7
+          {
+            echo "| Minecraft versions | Required Java |"
+            echo "| :--- | :--- |"
+            printf "%s\n" "${rows[@]}"
+          } > /tmp/versions-table.md
+
+          awk -v tablefile=/tmp/versions-table.md '
+            BEGIN { while ((getline line < tablefile) > 0) table = table line "\n" }
+            /<!-- versions-table:start -->/ { print; printf "%s", table; skip=1; next }
+            /<!-- versions-table:end -->/ { skip=0 }
+            !skip { print }
+          ' README.md > README.md.new
+          mv README.md.new README.md
+
+      - name: Commit README
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          name: anarchymod-mc-26.2
-          path: versions/26.2/build/libs/anarchymod-mc-26.2-*.jar
-          if-no-files-found: error
+          commit_message: "chore(release): update README download links for ${{ inputs.version }}"
+          file_pattern: README.md
+
+  set-after-version:
+    needs: build
+    uses: ./.github/workflows/set-version.yml
+    with:
+      version: ${{ inputs.after-version }}
