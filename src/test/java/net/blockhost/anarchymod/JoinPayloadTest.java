@@ -24,39 +24,33 @@ class JoinPayloadTest {
 
     @Test
     void encodesAnEmptyJoinPayload() throws Exception {
-        // ? if <1.14.4 {
-        /*
-         * PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-         */// ?} else {
+        //? if <1.14.4 {
+        /*PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+        *///?} else {
         FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-        // ?}
+        //?}
 
         try {
-            // ? if <1.14.4 {
-            /*
-             * CustomPayloadC2SPacket packet = JoinPayload.createPacket();
-             */// ?} else {
+            //? if <1.14.4 {
+            /*CustomPayloadC2SPacket packet = JoinPayload.createPacket();
+            *///?} else {
             ServerboundCustomPayloadPacket packet = JoinPayload.createPacket();
-            // ?}
-            // ? if <1.20.5 {
-            /*
-             * packet.write(buffer);
-             */// ?} else {
+            //?}
+            //? if <1.20.5 {
+            /*packet.write(buffer);
+            *///?} else {
             ServerboundCustomPayloadPacket.STREAM_CODEC.encode(buffer, packet);
-            // ?}
+            //?}
 
-            // ? if >=1.21.11 {
+            //? if >=1.21.11 {
             assertEquals(JoinPayload.ID, buffer.readIdentifier());
-            // ?} elif >=1.14.4 {
-            /*
-             * assertEquals(JoinPayload.ID, buffer.readResourceLocation());
-             */// ?} elif >1.12.2 {
-            /*
-             * assertEquals(JoinPayload.ID, buffer.readIdentifier());
-             */// ?} else {
-            /*
-             * assertEquals(JoinPayload.ID.toString(), buffer.readString(32767));
-             */// ?}
+            //?} elif >=1.14.4 {
+            /*assertEquals(JoinPayload.ID, buffer.readResourceLocation());
+            *///?} elif >1.12.2 {
+            /*assertEquals(JoinPayload.ID, buffer.readIdentifier());
+            *///?} else {
+            /*assertEquals(JoinPayload.ID.toString(), buffer.readString(32767));
+            *///?}
             assertFalse(buffer.isReadable());
         } finally {
             buffer.release();

@@ -38,9 +38,10 @@ public final class Domains {
     private static final int MAX_REMOTE_DOMAINS = 4_096;
 
     private static final Set<String> DEFAULT = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-            "*.6b6t.org", "*.10b10t.org", "*.6b6t.cc", "*.6b6t.me",
-            "*.7b7t.me", "*.8b8t.org", "*.8b8t.xyz", "*.alacity.net",
-            "*.anarchypvp.pw", "*.l2x9.org", "*.simpleanarchy.org")));
+        "*.6b6t.org", "*.10b10t.org", "*.6b6t.cc", "*.6b6t.me",
+        "*.7b7t.me", "*.8b8t.org", "*.8b8t.xyz", "*.alacity.net",
+        "*.anarchypvp.pw", "*.l2x9.org", "*.simpleanarchy.org"
+    )));
 
     private static final Gson GSON = new Gson();
     private static final AtomicBoolean REMOTE_LOAD_STARTED = new AtomicBoolean();
@@ -55,78 +56,71 @@ public final class Domains {
         }
     }
 
-    // ? if >=1.19.4 {
+    //? if >=1.19.4 {
     private static void loadRemoteAsync() {
         try {
             HttpClient client = HttpClient.newBuilder()
-                    .connectTimeout(Duration.ofSeconds(5))
-                    .build();
+                .connectTimeout(Duration.ofSeconds(5))
+                .build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(DOMAINS_URL))
-                    .timeout(Duration.ofSeconds(10))
-                    .header("Accept", "application/json")
-                    .GET()
-                    .build();
+                .uri(URI.create(DOMAINS_URL))
+                .timeout(Duration.ofSeconds(10))
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
             client.sendAsync(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8))
-                    .thenAccept(response -> applyRemoteResponse(response.statusCode(), response.body()))
-                    .exceptionally(error -> {
-                        LOGGER.warning("Failed to load domains from remote, using defaults: " + error.getMessage());
-                        return null;
-                    });
+                .thenAccept(response -> applyRemoteResponse(response.statusCode(), response.body()))
+                .exceptionally(error -> {
+                    LOGGER.warning("Failed to load domains from remote, using defaults: " + error.getMessage());
+                    return null;
+                });
         } catch (RuntimeException error) {
-            // Domain checks must remain available even if the HTTP client cannot be
-            // initialized.
+            // Domain checks must remain available even if the HTTP client cannot be initialized.
             LOGGER.warning("Failed to load domains from remote, using defaults: " + error.getMessage());
         }
     }
-    // ?} else {
-    /*
-     * private static void loadRemoteAsync() {
-     * CompletableFuture.runAsync(() -> {
-     * HttpURLConnection connection = null;
-     * try {
-     * connection = (HttpURLConnection) new URL(DOMAINS_URL).openConnection();
-     * connection.setRequestMethod("GET");
-     * connection.setRequestProperty("Accept", "application/json");
-     * connection.setConnectTimeout(5_000);
-     * connection.setReadTimeout(10_000);
-     *
-     * int statusCode = connection.getResponseCode();
-     * InputStream stream = statusCode == 200 ? connection.getInputStream() :
-     * connection.getErrorStream();
-     * applyRemoteResponse(statusCode, readBody(stream));
-     * } catch (IOException | RuntimeException error) {
-     * // Domain checks must remain available even if the HTTP client cannot be
-     * initialized.
-     * LOGGER.warning("Failed to load domains from remote, using defaults: " +
-     * error.getMessage());
-     * } finally {
-     * if (connection != null) {
-     * connection.disconnect();
-     * }
-     * }
-     * });
-     * }
-     *
-     * private static String readBody(InputStream stream) throws IOException {
-     * if (stream == null) {
-     * return "";
-     * }
-     *
-     * StringBuilder builder = new StringBuilder();
-     * try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream,
-     * StandardCharsets.UTF_8))) {
-     * char[] buffer = new char[8_192];
-     * int read;
-     * while (builder.length() <= MAX_RESPONSE_LENGTH && (read =
-     * reader.read(buffer)) != -1) {
-     * builder.append(buffer, 0, read);
-     * }
-     * }
-     * return builder.toString();
-     * }
-     */// ?}
+    //?} else {
+    /*private static void loadRemoteAsync() {
+        CompletableFuture.runAsync(() -> {
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) new URL(DOMAINS_URL).openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setConnectTimeout(5_000);
+                connection.setReadTimeout(10_000);
+
+                int statusCode = connection.getResponseCode();
+                InputStream stream = statusCode == 200 ? connection.getInputStream() : connection.getErrorStream();
+                applyRemoteResponse(statusCode, readBody(stream));
+            } catch (IOException | RuntimeException error) {
+                // Domain checks must remain available even if the HTTP client cannot be initialized.
+                LOGGER.warning("Failed to load domains from remote, using defaults: " + error.getMessage());
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        });
+    }
+
+    private static String readBody(InputStream stream) throws IOException {
+        if (stream == null) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+            char[] buffer = new char[8_192];
+            int read;
+            while (builder.length() <= MAX_RESPONSE_LENGTH && (read = reader.read(buffer)) != -1) {
+                builder.append(buffer, 0, read);
+            }
+        }
+        return builder.toString();
+    }
+    *///?}
 
     private static void applyRemoteResponse(int statusCode, String body) {
         if (statusCode != 200) {
@@ -246,8 +240,7 @@ public final class Domains {
         }
 
         try {
-            // IPv6 literals contain colons and are not valid IDNs, but preserving them is
-            // safe.
+            // IPv6 literals contain colons and are not valid IDNs, but preserving them is safe.
             if (host.indexOf(':') >= 0) {
                 return host.toLowerCase(Locale.ROOT);
             }

@@ -27,57 +27,46 @@ public class ServerListMixin {
     @Unique
     private static final String DEFAULT_SERVER_ADDRESS = "6b6t.org";
 
-    // ? if <=1.13.2 {
-    /*
-     * @Shadow
-     *
-     * @Final
-     * private List<ServerInfo> servers;
-     */// ?} elif <1.14.4 {
-    /*
-     * @Shadow
-     *
-     * @Final
-     * private List<ServerEntry> serverEntries;
-     */// ?} else {
+    //? if <=1.13.2 {
+    /*@Shadow
+    @Final
+    private List<ServerInfo> servers;
+    *///?} elif <1.14.4 {
+    /*@Shadow
+    @Final
+    private List<ServerEntry> serverEntries;
+    *///?} else {
     @Shadow
     @Final
     private List<ServerData> serverList;
-    // ?}
+    //?}
 
-    // ? if <=1.13.2 {
-    /*
-     * @Inject(method = "loadFile", at = @At("RETURN"))
-     * public void afterLoad(CallbackInfo ci) {
-     * if (servers.stream().noneMatch(data -> Domains.matches(data.address, "*." +
-     * DEFAULT_SERVER_ADDRESS))) {
-     * servers.add(0, new ServerInfo("6b6t", DEFAULT_SERVER_ADDRESS, false));
-     * }
-     * }
-     */// ?} elif <1.14.4 {
-    /*
-     * @Inject(method = "loadFile", at = @At("RETURN"))
-     * public void afterLoad(CallbackInfo ci) {
-     * if (serverEntries.stream().noneMatch(data -> Domains.matches(data.address,
-     * "*." + DEFAULT_SERVER_ADDRESS))) {
-     * serverEntries.add(0, new ServerEntry("6b6t", DEFAULT_SERVER_ADDRESS, false));
-     * }
-     * }
-     */// ?} else {
+    //? if <=1.13.2 {
+    /*@Inject(method = "loadFile", at = @At("RETURN"))
+    public void afterLoad(CallbackInfo ci) {
+        if (servers.stream().noneMatch(data -> Domains.matches(data.address, "*." + DEFAULT_SERVER_ADDRESS))) {
+            servers.add(0, new ServerInfo("6b6t", DEFAULT_SERVER_ADDRESS, false));
+        }
+    }
+    *///?} elif <1.14.4 {
+    /*@Inject(method = "loadFile", at = @At("RETURN"))
+    public void afterLoad(CallbackInfo ci) {
+        if (serverEntries.stream().noneMatch(data -> Domains.matches(data.address, "*." + DEFAULT_SERVER_ADDRESS))) {
+            serverEntries.add(0, new ServerEntry("6b6t", DEFAULT_SERVER_ADDRESS, false));
+        }
+    }
+    *///?} else {
     @Inject(method = "load", at = @At("RETURN"))
     public void afterLoad(CallbackInfo ci) {
         if (serverList.stream().noneMatch(data -> Domains.matches(data.ip, "*." + DEFAULT_SERVER_ADDRESS))) {
-            // ? if <1.20.2 {
-            /*
-             * serverList.add(0, new ServerData("6b6t", DEFAULT_SERVER_ADDRESS, false));
-             */// ? } elif <1.20.5 {
-            /*
-             * serverList.add(0, new ServerData("6b6t", DEFAULT_SERVER_ADDRESS,
-             * ServerData.Type.OTHER));
-             */// ?} else {
+            //? if <1.20.2 {
+            /*serverList.add(0, new ServerData("6b6t", DEFAULT_SERVER_ADDRESS, false));
+            *///? } elif <1.20.5 {
+            /*serverList.add(0, new ServerData("6b6t", DEFAULT_SERVER_ADDRESS, ServerData.Type.OTHER));
+            *///?} else {
             serverList.addFirst(new ServerData("6b6t", DEFAULT_SERVER_ADDRESS, ServerData.Type.OTHER));
-            // ?}
+            //?}
         }
     }
-    // ?}
+    //?}
 }

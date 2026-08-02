@@ -11,13 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BlockedServersMixin {
 
     @Inject(method = "isBlockedServerHostName", at = @At("RETURN"), cancellable = true, remap = false)
-    // ? if <1.17 {
-    /*
-     * private static void isBlockedServerHostName(String server,
-     * CallbackInfoReturnable<Boolean> cir) {
-     */// ?} else {
+    //? if <1.17 {
+    /*private static void isBlockedServerHostName(String server, CallbackInfoReturnable<Boolean> cir) {
+    *///?} else {
     public void isBlockedServerHostName(String server, CallbackInfoReturnable<Boolean> cir) {
-        // ?}
+    //?}
         boolean contains = Domains.contains(server);
         if (contains) {
             cir.setReturnValue(false);

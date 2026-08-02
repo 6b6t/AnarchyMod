@@ -30,49 +30,36 @@ import net.minecraft.resources.Identifier;
 
 public final class JoinPayload {
 
-    // ? if >=1.21.11 {
+    //? if >=1.21.11 {
     public static final Identifier ID = Identifier.fromNamespaceAndPath("anarchymod", "join");
-    // ? } elif >=1.21.7 {
-    /*
-     * public static final ResourceLocation ID =
-     * ResourceLocation.fromNamespaceAndPath("anarchymod", "join");
-     */// ?} elif >=1.19.4 {
-    /*
-     * public static final ResourceLocation ID =
-     * ResourceLocation.tryBuild("anarchymod", "join");
-     */// ?} elif >=1.14.4 {
-    /*
-     * public static final ResourceLocation ID = new ResourceLocation("anarchymod",
-     * "join");
-     */// ?} else {
-    /*
-     * public static final Identifier ID = new Identifier("anarchymod", "join");
-     */// ?}
+    //? } elif >=1.21.7 {
+    /*public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("anarchymod", "join");
+    *///?} elif >=1.19.4 {
+    /*public static final ResourceLocation ID = ResourceLocation.tryBuild("anarchymod", "join");
+    *///?} elif >=1.14.4 {
+    /*public static final ResourceLocation ID = new ResourceLocation("anarchymod", "join");
+    *///?} else {
+    /*public static final Identifier ID = new Identifier("anarchymod", "join");
+    *///?}
 
     private JoinPayload() {
     }
 
-    // ? if <=1.12.2 {
-    /*
-     * public static CustomPayloadC2SPacket createPacket() {
-     * return new CustomPayloadC2SPacket(ID.toString(), new
-     * PacketByteBuf(Unpooled.EMPTY_BUFFER));
-     * }
-     */// ?} elif <1.14.4 {
-    /*
-     * public static CustomPayloadC2SPacket createPacket() {
-     * return new CustomPayloadC2SPacket(ID, new
-     * PacketByteBuf(Unpooled.EMPTY_BUFFER));
-     * }
-     */// ?} elif <1.20.2 {
-    /*
-     * public static ServerboundCustomPayloadPacket createPacket() {
-     * return new ServerboundCustomPayloadPacket(ID, new
-     * FriendlyByteBuf(Unpooled.EMPTY_BUFFER));
-     * }
-     */// ?} else {
+    //? if <=1.12.2 {
+    /*public static CustomPayloadC2SPacket createPacket() {
+        return new CustomPayloadC2SPacket(ID.toString(), new PacketByteBuf(Unpooled.EMPTY_BUFFER));
+    }
+    *///?} elif <1.14.4 {
+    /*public static CustomPayloadC2SPacket createPacket() {
+        return new CustomPayloadC2SPacket(ID, new PacketByteBuf(Unpooled.EMPTY_BUFFER));
+    }
+    *///?} elif <1.20.2 {
+    /*public static ServerboundCustomPayloadPacket createPacket() {
+        return new ServerboundCustomPayloadPacket(ID, new FriendlyByteBuf(Unpooled.EMPTY_BUFFER));
+    }
+    *///?} else {
     public static ServerboundCustomPayloadPacket createPacket() {
         return new ServerboundCustomPayloadPacket(new DiscardedPayload(ID));
     }
-    // ?}
+    //?}
 }
