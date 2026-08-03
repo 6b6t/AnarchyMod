@@ -58,7 +58,7 @@ tasks.processResources {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    // javac only gained --release in JDK 9; JDK 8 toolchains already target their own version.
+    // javac only gained --release in JDK 9
     if (javaVersion >= 9) {
         options.release.set(javaVersion)
     }
