@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release'
+        description: "Version to release"
         required: true
       after-version:
-        description: 'Snapshot version after release'
+        description: "Snapshot version after release"
         required: true
 
 jobs:
@@ -33,8 +33,8 @@ jobs:
       - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: "25"
+          distribution: "temurin"
 
       - name: Build with Gradle
         run: ./gradlew chiseledBuild
@@ -84,72 +84,127 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+          VERSION: ${{ inputs.version }}
+          REPO: ${{ github.repository }}
         run: |
-          VERSION="${{ inputs.version }}"
           REPO="${{ github.repository }}"
           DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
+
+          link() { echo "[${1}](${DOWNLOAD_URL}/anarchymod-mc-${1}-${VERSION}.jar)"; }
+          join() { local IFS=","; local out="$*"; echo "${out//,/, }"; }
+
+          mapfile -t MC_VERSIONS < <(for f in versions/*/gradle.properties; do
+            grep "^minecraft_version=" "$f" | cut -d= -f2
+          done | sort -V)
+
+          rows=()
+          group_key=""
+          group_links=()
+
+          flush_group() {
+            [ ${#group_links[@]} -eq 0 ] && return
+            rows+=("| ${group_key} | $(join "${group_links[@]}") |")
+          }
+
+          for v in "${MC_VERSIONS[@]}"; do
+            key=$(echo "$v" | cut -d. -f1,2)
+            if [ "$key" != "$group_key" ]; then
+              flush_group
+              group_key="$key"
+              group_links=()
+            fi
+            group_links+=("$(link "$v")")
+          done
+          flush_group
+
+          TABLE_ROWS=$(printf "%s\n" "${rows[@]}")
 
           NOTES=$(cat <<EOF
           ## Downloads
 
-          | Minecraft Version | Download |
+          Grab the jar matching your Minecraft version. All builds are also attached below under Assets.
+
+          | Minecraft versions | Downloads |
           |---|---|
-          | 1.19.4 | [\`anarchymod-mc-1.19.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.19.4-${VERSION}.jar) |
-          | 1.20 | [\`anarchymod-mc-1.20-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20-${VERSION}.jar) |
-          | 1.20.1 | [\`anarchymod-mc-1.20.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.1-${VERSION}.jar) |
-          | 1.20.2 | [\`anarchymod-mc-1.20.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.2-${VERSION}.jar) |
-          | 1.20.3 | [\`anarchymod-mc-1.20.3-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.3-${VERSION}.jar) |
-          | 1.20.4 | [\`anarchymod-mc-1.20.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.4-${VERSION}.jar) |
-          | 1.20.5 | [\`anarchymod-mc-1.20.5-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.5-${VERSION}.jar) |
-          | 1.20.6 | [\`anarchymod-mc-1.20.6-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.20.6-${VERSION}.jar) |
-          | 1.21 | [\`anarchymod-mc-1.21-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21-${VERSION}.jar) |
-          | 1.21.1 | [\`anarchymod-mc-1.21.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.1-${VERSION}.jar) |
-          | 1.21.2 | [\`anarchymod-mc-1.21.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.2-${VERSION}.jar) |
-          | 1.21.3 | [\`anarchymod-mc-1.21.3-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.3-${VERSION}.jar) |
-          | 1.21.4 | [\`anarchymod-mc-1.21.4-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.4-${VERSION}.jar) |
-          | 1.21.5 | [\`anarchymod-mc-1.21.5-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.5-${VERSION}.jar) |
-          | 1.21.6 | [\`anarchymod-mc-1.21.6-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.6-${VERSION}.jar) |
-          | 1.21.7 | [\`anarchymod-mc-1.21.7-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.7-${VERSION}.jar) |
-          | 1.21.8 | [\`anarchymod-mc-1.21.8-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.8-${VERSION}.jar) |
-          | 1.21.9 | [\`anarchymod-mc-1.21.9-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.9-${VERSION}.jar) |
-          | 1.21.10 | [\`anarchymod-mc-1.21.10-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.10-${VERSION}.jar) |
-          | 1.21.11 | [\`anarchymod-mc-1.21.11-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-1.21.11-${VERSION}.jar) |
-          | 26.1 | [\`anarchymod-mc-26.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1-${VERSION}.jar) |
-          | 26.1.1 | [\`anarchymod-mc-26.1.1-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1.1-${VERSION}.jar) |
-          | 26.1.2 | [\`anarchymod-mc-26.1.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.1.2-${VERSION}.jar) |
-          | 26.2 | [\`anarchymod-mc-26.2-${VERSION}.jar\`](${DOWNLOAD_URL}/anarchymod-mc-26.2-${VERSION}.jar) |
+          ${TABLE_ROWS}
 
           ${CHANGELOG}
           EOF
           )
 
+          shopt -s nullglob
+          ASSETS=(versions/*/build/libs/anarchymod-mc-*-"${VERSION}".jar)
+          shopt -u nullglob
+
+          if [ ${#ASSETS[@]} -eq 0 ]; then
+            echo "::error::No built jars matched versions/*/build/libs/anarchymod-mc-*-${VERSION}.jar - refusing to create an empty release." >&2
+            exit 1
+          fi
+
           gh release create "${VERSION}" \
             --title "AnarchyMod ${VERSION}" \
             --notes "${NOTES}" \
-            versions/1.19.4/build/libs/anarchymod-mc-1.19.4-${VERSION}.jar \
-            versions/1.20/build/libs/anarchymod-mc-1.20-${VERSION}.jar \
-            versions/1.20.1/build/libs/anarchymod-mc-1.20.1-${VERSION}.jar \
-            versions/1.20.2/build/libs/anarchymod-mc-1.20.2-${VERSION}.jar \
-            versions/1.20.3/build/libs/anarchymod-mc-1.20.3-${VERSION}.jar \
-            versions/1.20.4/build/libs/anarchymod-mc-1.20.4-${VERSION}.jar \
-            versions/1.20.5/build/libs/anarchymod-mc-1.20.5-${VERSION}.jar \
-            versions/1.20.6/build/libs/anarchymod-mc-1.20.6-${VERSION}.jar \
-            versions/1.21/build/libs/anarchymod-mc-1.21-${VERSION}.jar \
-            versions/1.21.1/build/libs/anarchymod-mc-1.21.1-${VERSION}.jar \
-            versions/1.21.2/build/libs/anarchymod-mc-1.21.2-${VERSION}.jar \
-            versions/1.21.3/build/libs/anarchymod-mc-1.21.3-${VERSION}.jar \
-            versions/1.21.4/build/libs/anarchymod-mc-1.21.4-${VERSION}.jar \
-            versions/1.21.5/build/libs/anarchymod-mc-1.21.5-${VERSION}.jar \
-            versions/1.21.6/build/libs/anarchymod-mc-1.21.6-${VERSION}.jar \
-            versions/1.21.7/build/libs/anarchymod-mc-1.21.7-${VERSION}.jar \
-            versions/1.21.8/build/libs/anarchymod-mc-1.21.8-${VERSION}.jar \
-            versions/1.21.9/build/libs/anarchymod-mc-1.21.9-${VERSION}.jar \
-            versions/1.21.10/build/libs/anarchymod-mc-1.21.10-${VERSION}.jar \
-            versions/1.21.11/build/libs/anarchymod-mc-1.21.11-${VERSION}.jar \
-            versions/26.1/build/libs/anarchymod-mc-26.1-${VERSION}.jar \
-            versions/26.1.1/build/libs/anarchymod-mc-26.1.1-${VERSION}.jar \
-            versions/26.1.2/build/libs/anarchymod-mc-26.1.2-${VERSION}.jar \
-            versions/26.2/build/libs/anarchymod-mc-26.2-${VERSION}.jar
+            "${ASSETS[@]}"
+
+      - name: Update README download links
+        env:
+          VERSION: ${{ inputs.version }}
+          REPO: ${{ github.repository }}
+        run: |
+          DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
+
+          link() { echo "[${1}](${DOWNLOAD_URL}/anarchymod-mc-${1}-${VERSION}.jar)"; }
+          join() { local IFS=","; local out="$*"; echo "${out//,/, }"; }
+
+          mapfile -t MC_VERSIONS < <(for f in versions/*/gradle.properties; do
+            grep "^minecraft_version=" "$f" | cut -d= -f2
+          done | sort -V)
+
+          rows=()
+          group_key=""
+          group_links=()
+          group_javas=()
+
+          flush_group() {
+            [ ${#group_links[@]} -eq 0 ] && return
+            mapfile -t uniq_java < <(printf "%s\n" "${group_javas[@]}" | sort -un)
+            java_label=$(IFS="/"; echo "${uniq_java[*]}")
+            rows+=("| $(join "${group_links[@]}") | ${java_label} |")
+          }
+
+          for v in "${MC_VERSIONS[@]}"; do
+            key=$(echo "$v" | cut -d. -f1,2)
+            jv=$(grep "^java_version=" "versions/$v/gradle.properties" | cut -d= -f2)
+            if [ "$key" != "$group_key" ]; then
+              flush_group
+              group_key="$key"
+              group_links=()
+              group_javas=()
+            fi
+            group_links+=("$(link "$v")")
+            group_javas+=("$jv")
+          done
+          flush_group
+
+          {
+            echo "| Minecraft versions | Required Java |"
+            echo "| :--- | :--- |"
+            printf "%s\n" "${rows[@]}"
+          } > /tmp/versions-table.md
+
+          awk -v tablefile=/tmp/versions-table.md '
+            BEGIN { while ((getline line < tablefile) > 0) table = table line "\n" }
+            /<!-- versions-table:start -->/ { print; printf "%s", table; skip=1; next }
+            /<!-- versions-table:end -->/ { skip=0 }
+            !skip { print }
+          ' README.md > README.md.new
+          mv README.md.new README.md
+
+      - name: Commit README
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "chore(release): update README download links for ${{ inputs.version }}"
+          file_pattern: README.md
 
   set-after-version:
     needs: build

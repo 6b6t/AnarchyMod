@@ -14,12 +14,15 @@ base {
     archivesName.set("anarchymod-mc-${minecraftVersion}")
 }
 
+// for fallback since 6 requires 17+ and 5 requires <17
+val junitJupiterVersion = if (javaVersion >= 17) "6.1.2" else "5.10.3"
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     implementation("com.google.code.gson:gson:2.14.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:6.1.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -55,7 +58,10 @@ tasks.processResources {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.release.set(javaVersion)
+    // javac only gained --release in JDK 9
+    if (javaVersion >= 9) {
+        options.release.set(javaVersion)
+    }
 }
 
 tasks.test {

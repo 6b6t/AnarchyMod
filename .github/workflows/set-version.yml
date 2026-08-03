@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to set'
+        description: "Version to set"
         required: true
   workflow_call:
     inputs:
@@ -32,4 +32,4 @@ jobs:
       - name: Commit Version
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: 'chore(release): bump version to ${{ inputs.version }}'
+          commit_message: "chore(release): bump version to ${{ inputs.version }}"
