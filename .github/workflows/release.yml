@@ -84,8 +84,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+          VERSION: ${{ inputs.version }}
+          REPO: ${{ github.repository }}
         run: |
-          VERSION="${{ inputs.version }}"
           REPO="${{ github.repository }}"
           DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
 
@@ -148,9 +149,8 @@ jobs:
       - name: Update README download links
         env:
           VERSION: ${{ inputs.version }}
+          REPO: ${{ github.repository }}
         run: |
-          : "${VERSION:?version input is required}"
-          REPO="${{ github.repository }}"
           DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${VERSION}"
 
           link() { echo "[${1}](${DOWNLOAD_URL}/anarchymod-mc-${1}-${VERSION}.jar)"; }
