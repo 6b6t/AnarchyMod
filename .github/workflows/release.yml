@@ -188,7 +188,7 @@ jobs:
 
           {
             echo "| Minecraft versions | Required Java |"
-            echo "| :--- | :--- |"
+            echo "|-----------|--------------|"
             printf "%s\n" "${rows[@]}"
           } > /tmp/versions-table.md
 
