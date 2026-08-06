@@ -17,7 +17,7 @@ Click a version below to download its jar from the latest release.
 
 <!-- versions-table:start -->
 | Minecraft versions | Required Java |
-| :--- | :--- |
+|-----------|--------------|
 | [1.9.4](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.9.4-1.4.0.jar) | 8 |
 | [1.10.2](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.10.2-1.4.0.jar) | 8 |
 | [1.11.2](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.11.2-1.4.0.jar) | 8 |
