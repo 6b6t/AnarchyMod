@@ -194,8 +194,8 @@ jobs:
 
           awk -v tablefile=/tmp/versions-table.md '
             BEGIN { while ((getline line < tablefile) > 0) table = table line "\n" }
-            /<!-- versions-table:start -->/ { print; printf "%s", table; skip=1; next }
-            /<!-- versions-table:end -->/ { skip=0 }
+            /<!-- versions-table:start -->/ { print; print ""; printf "%s", table; skip=1; next }
+            /<!-- versions-table:end -->/ { skip=0; print ""; print; next }
             !skip { print }
           ' README.md > README.md.new
           mv README.md.new README.md

@@ -16,6 +16,7 @@
 Click a version below to download its jar from the latest release.
 
 <!-- versions-table:start -->
+
 | Minecraft versions | Required Java |
 |-----------|--------------|
 | [1.9.4](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.9.4-1.4.0.jar) | 8 |
@@ -33,6 +34,7 @@ Click a version below to download its jar from the latest release.
 | [1.21](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21-1.4.0.jar), [1.21.1](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.1-1.4.0.jar), [1.21.2](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.2-1.4.0.jar), [1.21.3](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.3-1.4.0.jar), [1.21.4](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.4-1.4.0.jar), [1.21.5](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.5-1.4.0.jar), [1.21.6](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.6-1.4.0.jar), [1.21.7](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.7-1.4.0.jar), [1.21.8](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.8-1.4.0.jar), [1.21.9](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.9-1.4.0.jar), [1.21.10](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.10-1.4.0.jar), [1.21.11](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-1.21.11-1.4.0.jar) | 21 |
 | [26.1](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-26.1-1.4.0.jar), [26.1.1](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-26.1.1-1.4.0.jar), [26.1.2](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-26.1.2-1.4.0.jar) | 25 |
 | [26.2](https://github.com/6b6t/AnarchyMod/releases/download/1.4.0/anarchymod-mc-26.2-1.4.0.jar) | 25 |
+
 <!-- versions-table:end -->
 
 ## Installation
