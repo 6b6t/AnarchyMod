@@ -17,6 +17,8 @@ import net.minecraft.util.PacketByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 *///?} else {
+import io.netty.buffer.Unpooled;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.DiscardedPayload;
 //?}
@@ -57,9 +59,15 @@ public final class JoinPayload {
     /*public static ServerboundCustomPayloadPacket createPacket() {
         return new ServerboundCustomPayloadPacket(ID, new FriendlyByteBuf(Unpooled.EMPTY_BUFFER));
     }
+    *///?} elif <1.20.5 {
+    /*public static ServerboundCustomPayloadPacket createPacket() {
+        return new ServerboundCustomPayloadPacket(new DiscardedPayload(ID));
+    }
     *///?} else {
     public static ServerboundCustomPayloadPacket createPacket() {
-        return new ServerboundCustomPayloadPacket(new DiscardedPayload(ID));
+        DiscardedPayload payload = DiscardedPayload.codec(ID, 0)
+            .decode(new FriendlyByteBuf(Unpooled.EMPTY_BUFFER));
+        return new ServerboundCustomPayloadPacket(payload);
     }
     //?}
 }
