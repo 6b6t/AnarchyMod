@@ -11,7 +11,20 @@ on:
         required: true
 
 jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate CurseForge configuration
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: |
+          if [[ -z "${CURSEFORGE_TOKEN}" ]]; then
+            echo "::error::The CURSEFORGE_TOKEN repository secret is not configured."
+            exit 1
+          fi
+
   set-release-version:
+    needs: validate-release
     uses: ./.github/workflows/set-version.yml
     with:
       version: ${{ inputs.version }}
@@ -19,6 +32,8 @@ jobs:
   build:
     needs: set-release-version
     runs-on: ubuntu-latest
+    outputs:
+      minecraft_versions: ${{ steps.minecraft_versions.outputs.versions }}
     permissions:
       contents: write
     steps:
@@ -79,6 +94,28 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Prepare CurseForge release artifacts
+        env:
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+        run: printf '%s\n' "${CHANGELOG}" > curseforge-changelog.md
+
+      - name: Build CurseForge version matrix
+        id: minecraft_versions
+        run: |
+          VERSIONS=$(for file in versions/*/gradle.properties; do
+            grep "^minecraft_version=" "${file}" | cut -d= -f2
+          done | sort -V | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "versions=${VERSIONS}" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload CurseForge release artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: curseforge-release-${{ inputs.version }}
+          path: |
+            curseforge-changelog.md
+            versions/*/build/libs/anarchymod-mc-*-${{ inputs.version }}.jar
+          if-no-files-found: error
 
       - name: Create GitHub Release
         env:
@@ -206,8 +243,38 @@ jobs:
           commit_message: "chore(release): update README download links for ${{ inputs.version }}"
           file_pattern: README.md
 
-  set-after-version:
+  publish-curseforge:
     needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        minecraft: ${{ fromJSON(needs.build.outputs.minecraft_versions) }}
+    steps:
+      - name: Download CurseForge release artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: curseforge-release-${{ inputs.version }}
+
+      - name: Publish Minecraft ${{ matrix.minecraft }} to CurseForge
+        uses: Kira-NT/mc-publish@v3
+        with:
+          curseforge-id: 1644776
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: versions/${{ matrix.minecraft }}/build/libs/anarchymod-mc-${{ matrix.minecraft }}-${{ inputs.version }}.jar
+          name: AnarchyMod ${{ inputs.version }} for Minecraft ${{ matrix.minecraft }}
+          version: ${{ inputs.version }}
+          version-type: release
+          changelog-file: curseforge-changelog.md
+          loaders: fabric
+          environment: client
+          game-versions: ${{ matrix.minecraft }}
+          game-version-filter: none
+          dependencies: fabric-api(required)
+
+  set-after-version:
+    needs: publish-curseforge
     uses: ./.github/workflows/set-version.yml
     with:
       version: ${{ inputs.after-version }}
