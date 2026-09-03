@@ -14,12 +14,17 @@ jobs:
   validate-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate CurseForge configuration
+      - name: Validate publishing configuration
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           if [[ -z "${CURSEFORGE_TOKEN}" ]]; then
             echo "::error::The CURSEFORGE_TOKEN repository secret is not configured."
+            exit 1
+          fi
+          if [[ -z "${MODRINTH_TOKEN}" ]]; then
+            echo "::error::The MODRINTH_TOKEN repository secret is not configured."
             exit 1
           fi
 
@@ -33,7 +38,7 @@ jobs:
     needs: set-release-version
     runs-on: ubuntu-latest
     outputs:
-      minecraft_versions: ${{ steps.minecraft_versions.outputs.versions }}
+      release_targets: ${{ steps.release_targets.outputs.targets }}
     permissions:
       contents: write
     steps:
@@ -95,25 +100,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Prepare CurseForge release artifacts
+      - name: Prepare platform release artifacts
         env:
           CHANGELOG: ${{ steps.changelog.outputs.changelog }}
-        run: printf '%s\n' "${CHANGELOG}" > curseforge-changelog.md
+        run: printf '%s\n' "${CHANGELOG}" > release-changelog.md
 
-      - name: Build CurseForge version matrix
-        id: minecraft_versions
+      - name: Build platform release matrix
+        id: release_targets
         run: |
-          VERSIONS=$(for file in versions/*/gradle.properties; do
-            grep "^minecraft_version=" "${file}" | cut -d= -f2
-          done | sort -V | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "versions=${VERSIONS}" >> "${GITHUB_OUTPUT}"
+          mapfile -t VERSION_FILES < <(find versions -mindepth 2 -maxdepth 2 -name gradle.properties | sort -V)
+          TARGETS=$(for file in "${VERSION_FILES[@]}"; do
+            MINECRAFT_VERSION=$(grep "^minecraft_version=" "${file}" | cut -d= -f2)
+            JAVA_VERSION=$(grep "^java_version=" "${file}" | cut -d= -f2)
+            jq -n -c \
+              --arg minecraft "${MINECRAFT_VERSION}" \
+              --arg java "${JAVA_VERSION}" \
+              '{minecraft: $minecraft, java: ($java | tonumber)}'
+          done | jq -s -c '.')
+          echo "targets=${TARGETS}" >> "${GITHUB_OUTPUT}"
 
-      - name: Upload CurseForge release artifacts
+      - name: Upload platform release artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: curseforge-release-${{ inputs.version }}
+          name: platform-release-${{ inputs.version }}
           path: |
-            curseforge-changelog.md
+            release-changelog.md
             versions/*/build/libs/anarchymod-mc-*-${{ inputs.version }}.jar
           if-no-files-found: error
 
@@ -243,38 +254,43 @@ jobs:
           commit_message: "chore(release): update README download links for ${{ inputs.version }}"
           file_pattern: README.md
 
-  publish-curseforge:
+  publish-platforms:
     needs: build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        minecraft: ${{ fromJSON(needs.build.outputs.minecraft_versions) }}
+        target: ${{ fromJSON(needs.build.outputs.release_targets) }}
     steps:
-      - name: Download CurseForge release artifacts
+      - name: Download platform release artifacts
         uses: actions/download-artifact@v8
         with:
-          name: curseforge-release-${{ inputs.version }}
+          name: platform-release-${{ inputs.version }}
 
-      - name: Publish Minecraft ${{ matrix.minecraft }} to CurseForge
+      - name: Publish Minecraft ${{ matrix.target.minecraft }}
         uses: Kira-NT/mc-publish@v3
         with:
           curseforge-id: 1644776
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          files: versions/${{ matrix.minecraft }}/build/libs/anarchymod-mc-${{ matrix.minecraft }}-${{ inputs.version }}.jar
-          name: AnarchyMod ${{ inputs.version }} for Minecraft ${{ matrix.minecraft }}
+          modrinth-id: anarchymod
+          modrinth-featured: true
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-unfeature-mode: subset
+          files: versions/${{ matrix.target.minecraft }}/build/libs/anarchymod-mc-${{ matrix.target.minecraft }}-${{ inputs.version }}.jar
+          name: AnarchyMod ${{ inputs.version }} for Minecraft ${{ matrix.target.minecraft }}
           version: ${{ inputs.version }}
+          modrinth-version: ${{ inputs.version }}+mc${{ matrix.target.minecraft }}
           version-type: release
-          changelog-file: curseforge-changelog.md
+          changelog-file: release-changelog.md
           loaders: fabric
           environment: client
-          game-versions: ${{ matrix.minecraft }}
+          game-versions: ${{ matrix.target.minecraft }}
           game-version-filter: none
-          dependencies: fabric-api(required)
+          modrinth-java: ${{ matrix.target.java }}
 
   set-after-version:
-    needs: publish-curseforge
+    needs: publish-platforms
     uses: ./.github/workflows/set-version.yml
     with:
       version: ${{ inputs.after-version }}
